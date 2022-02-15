@@ -30,9 +30,9 @@ public class StudentAdapter extends ArrayAdapter<StudentModel> {
         TextView ageTV = v.findViewById(R.id.ageTextId);
         TextView addressTV = v.findViewById(R.id.addressTextId);
 
-        nameTV.setText("  "+arrayList.get(position).getName());
-        ageTV.setText("  "+String.valueOf(arrayList.get(position).getAge()));
-        addressTV.setText("  "+arrayList.get(position).getAddress());
+        nameTV.setText("  "+arrayList.get(position).name);
+        ageTV.setText("  "+arrayList.get(position).age);
+        addressTV.setText("  "+arrayList.get(position).address);
         return v;
     }
 }

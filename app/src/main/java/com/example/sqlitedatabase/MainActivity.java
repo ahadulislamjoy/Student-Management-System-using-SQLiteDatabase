@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
      EditText nameEditText,ageEditText,addressEditText;
      Button addButton,showButton;
      StudentDatabaseSource studentDatabaseSource;
+     StudentModel studentModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +31,42 @@ public class MainActivity extends AppCompatActivity {
         addButton=findViewById(R.id.addButtonId);
         showButton=findViewById(R.id.showButtonId);
 
+         studentModel = (StudentModel) getIntent().getSerializableExtra("STUDENT");
+         if(studentModel != null){
+             addButton.setText("UPDATE BUTTON");
+             nameEditText.setText(studentModel.name);
+             ageEditText.setText(String.valueOf(studentModel.age));
+             addressEditText.setText(studentModel.address);
+         }
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudentModel studentModel = new StudentModel(nameEditText.getText().toString(),Integer.valueOf(ageEditText.getText().toString()),addressEditText.getText().toString());
-                Boolean status = studentDatabaseSource.addStudent(studentModel);
-                if (status){
-                    Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(MainActivity.this, "not saved", Toast.LENGTH_SHORT).show();
+                if (studentModel != null){
+                    int id = studentModel.id;
+                    String updateName = nameEditText.getText().toString();
+                    int updateAge = Integer.valueOf(ageEditText.getText().toString());
+                    String updateAddress = addressEditText.getText().toString();
+                    StudentModel updateStudentModel = new StudentModel(id,updateName,updateAge,updateAddress);
+                    boolean updateStudentStatus = studentDatabaseSource.updateStudent(updateStudentModel);
+                    if (updateStudentStatus){
+                        Toast.makeText(MainActivity.this, "update", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(MainActivity.this, "not update", Toast.LENGTH_SHORT).show();
+                    }
                 }
+                else {
+                        StudentModel studentModel = new StudentModel(nameEditText.getText().toString(),Integer.valueOf(ageEditText.getText().toString()),addressEditText.getText().toString());
+                        Boolean status = studentDatabaseSource.addStudent(studentModel);
+                        if (status){
+                            Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainActivity.this, "not saved", Toast.LENGTH_SHORT).show();
+                        }
 
+                    }
             }
+
         });
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
